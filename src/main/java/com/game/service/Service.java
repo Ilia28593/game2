@@ -63,7 +63,7 @@ public class Service {
     }
 
     public Player addNewPlayer(Player player) {
-        if (player.getName() == null || player.getName().isBlank() || player.getTitle() == null || player.getRace() == null
+        if (player.getName() == null || player.getTitle() == null || player.getRace() == null
                 || player.getProfession() == null || player.getBirthday() == null || player.getExperience() == null
                 || player.getTitle().length() > 30 || player.getName().length() > 12 || player.getName().equals("")
                 || player.getExperience() < 0 || player.getExperience() > 10000000 || player.getBirthday().getTime() < 0
