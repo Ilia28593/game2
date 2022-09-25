@@ -5,7 +5,7 @@ import com.game.entity.Player;
 import com.game.entity.Profession;
 import com.game.entity.Race;
 import com.game.repository.PlayerRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -13,10 +13,14 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @org.springframework.stereotype.Service
-@RequiredArgsConstructor
 @Transactional
 public class Service {
     private final PlayerRepository playerRepository;
+
+    @Autowired
+    public Service(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     public List<Player> getFilteredPlayers(String name, String title, Race race, Profession profession,
                                            Long after, Long before, Boolean banned, Integer minExperience,
@@ -26,8 +30,8 @@ public class Service {
         final Date beforeDate = before == null ? null : new Date(before);
 
         playerRepository.findAll().forEach(player -> {
-            if (name!=null && !player.getName().contains(name)) return;
-            if (title!=null && !player.getTitle().contains(title)) return;
+            if (name != null && !player.getName().contains(name)) return;
+            if (title != null && !player.getTitle().contains(title)) return;
             if (race != null && player.getRace() != race) return;
             if (profession != null && player.getProfession() != profession) return;
             if (after != null && player.getBirthday().before(afterDate)) return;
@@ -41,6 +45,7 @@ public class Service {
         });
         return result;
     }
+
     public List<Player> getSortedPlayers(List<Player> allPlayers, Integer page, Integer pageSize, PlayerOrder order) {
         int pageNum = page + 1;
         int count = pageSize;
